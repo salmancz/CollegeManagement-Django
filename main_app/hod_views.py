@@ -537,6 +537,31 @@ def view_student_leave(request):
             return HttpResponse(True)
         except Exception as e:
             return False
+        
+
+@csrf_exempt
+def payment(request):
+    if request.method != 'POST':
+        allLeave = LeaveReportStudent.objects.all()
+        context = {
+            'allLeave': allLeave,
+            'page_title': 'Leave Applications From Students'
+        }
+        return render(request, "hod_template/payment.html", context)
+    else:
+        id = request.POST.get('id')
+        status = request.POST.get('status')
+        if (status == '1'):
+            status = 1
+        else:
+            status = -1
+        try:
+            leave = get_object_or_404(LeaveReportStudent, id=id)
+            leave.status = status
+            leave.save()
+            return HttpResponse(True)
+        except Exception as e:
+            return False
 
 
 def admin_view_attendance(request):

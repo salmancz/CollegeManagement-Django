@@ -50,6 +50,8 @@ urlpatterns = [
          name="staff_feedback_message",),
     path("student/view/leave/", hod_views.view_student_leave,
          name="view_student_leave",),
+      path("student/view/payment/", hod_views.payment,
+         name="payment",),
     path("staff/view/leave/", hod_views.view_staff_leave, name="view_staff_leave",),
     path("attendance/view/", hod_views.admin_view_attendance,
          name="admin_view_attendance",),
@@ -82,6 +84,8 @@ urlpatterns = [
          hod_views.edit_course, name='edit_course'),
     path("subject/edit/<int:subject_id>",
          hod_views.edit_subject, name='edit_subject'),
+    
+    
 
 
     # Staff
