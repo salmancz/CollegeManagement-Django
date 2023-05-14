@@ -1,5 +1,6 @@
 import json
 import requests
+import razorpay
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse, JsonResponse
@@ -20,8 +21,21 @@ def login_page(request):
             return redirect(reverse("staff_home"))
         else:
             return redirect(reverse("student_home"))
-    return render(request, 'main_app/login.html')
+    return render(request, 'main_app/login.html') 
 
+# payment gateway
+def home(request):
+    if request.method == 'POST':
+        amount = 50000
+        order_currency = 'INR'
+        client = razorpay.Client(
+            auth=('rzp_test_jkh95UAWnHF5eB','KYLu9Z2GN1PZd1gWNPhf6tlj'))
+        payment = client.order.create({'amount': amount, 'currency': 'INR', 'payment_capture': '1'})
+    return render(request, "login.html")
+
+@csrf_exempt
+def success(request):
+    return render(request, "sidebar_template.html")
 
 def doLogin(request, **kwargs):
     if request.method != 'POST':
