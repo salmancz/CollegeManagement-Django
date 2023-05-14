@@ -25,14 +25,18 @@
     <!-- Daterange picker -->
     <link rel="stylesheet" href="{% static 'plugins/daterangepicker/daterangepicker.css'%} ">
     
-    <!-- Google Font: Source Sans Pro -->
-    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <!-- Google Font: Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     {% block custom_css %}
 
     {% endblock custom_css %}
+    
 </head>
 
-<body class="hold-transition sidebar-mini layout-fixed">
+<body class="hold-transition sidebar-mini layout-fixed"
+style="font-family : Poppins; font-weight: 600">
     <div class="wrapper">
 
         <!-- Navbar -->
@@ -40,7 +44,7 @@
             <!-- Left navbar links -->
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a>
+                    <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars"style="color:#026767;"></i></a>
                 </li>
 
             </ul>
@@ -55,20 +59,23 @@
         {% include "main_app/sidebar_template.html" with user=user %}
 
       
-        <div class="content-wrapper">
+        <div class="content-wrapper"
+        style="background-color: #F6F6F6">
 
             <!-- Content Wrapper. Contains page content -->
             <!-- Content Header (Page header) -->
-            <div class="content-header">
-                <div class="container-fluid">
+            <div class="content-header"
+            >
+                <div class="container-fluid"
+                >
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1 class="m-0 text-dark">{% block page_title %}{% endblock page_title %}</h1>
+                            <h1 class="m-0 "style="color:#026767; font-weight: 700";>{% block page_title %}{% endblock page_title %}</h1>
                         </div><!-- /.col -->
                         <div class="col-sm-6">
                             
                             <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                <li class="breadcrumb-item"><a href="#" style="color:#026767; ">Home</a></li>
                                 <li class="breadcrumb-item active">{{ page_title }}</li>
                             </ol>
                         </div><!-- /.col -->
