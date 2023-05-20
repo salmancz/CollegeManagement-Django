@@ -1,0 +1,26 @@
+.active1{
+    background-color : #006666;
+    color:#cde3e3 !important; 
+}
+
+
+
+.no-gove{
+    color: #006666;
+}
+.no-gove:hover{
+    color: #006666;
+}
+
+
+.nav-link:hover{
+    color: #006666 !important;
+}
+
+.info a{
+    color: #035151 !important;
+}
+
+.active1:hover{
+    color:#cde3e3 !important; 
+}
