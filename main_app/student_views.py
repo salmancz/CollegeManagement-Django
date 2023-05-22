@@ -1,6 +1,8 @@
 import json
 import math
 from datetime import datetime
+import razorpay
+
 
 from django.contrib import messages
 from django.core.files.storage import FileSystemStorage
@@ -11,7 +13,8 @@ from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 
 from .forms import *
-from .models import *
+from .models import * 
+
 
 
 def student_home(request):
@@ -85,6 +88,22 @@ def student_view_attendance(request):
         except Exception as e:
             return None
 
+@csrf_exempt
+def student_payment(request):
+    if request.method == "POST":
+        name = request.POST.get('name')
+        amount =int(request.POST.get('amount'))
+        print(amount)
+        email=request.POST.get('email')
+        client = razorpay.Client(auth =("rzp_test_jkh95UAWnHF5eB" , "KYLu9Z2GN1PZd1gWNPhf6tlj"))
+        payment = client.order.create({'amount':amount, 'currency':'INR',
+                              'payment_capture':'1' })
+        
+        info = donate(name = name , email = email , amount =amount , order_id = payment['id'])
+        info.save()
+        
+        return render(request, 'hod_template/payment.html' ,{'payment':payment})
+    return render(request, 'hod_template/payment.html')
 
 def student_apply_leave(request):
     form = LeaveReportStudentForm(request.POST or None)

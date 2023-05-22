@@ -1,6 +1,8 @@
 import json
 import requests
 import razorpay
+from django.conf import settings
+from .models import donate
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse, JsonResponse
@@ -24,41 +26,70 @@ def login_page(request):
     return render(request, 'main_app/login.html') 
 
 # payment gateway
-def home(request):
-    if request.method == 'POST':
-        amount = 50000
-        order_currency = 'INR'
-        client = razorpay.Client(
-            auth=('rzp_test_jkh95UAWnHF5eB','KYLu9Z2GN1PZd1gWNPhf6tlj'))
-        payment = client.order.create({'amount': amount, 'currency': 'INR', 'payment_capture': '1'})
-    return render(request, "login.html")
+# def home(request):
+#     if request.method == 'POST':
+#         amount = 50000
+#         order_currency = 'INR'
+#         client = razorpay.Client(
+#             auth=('rzp_test_jkh95UAWnHF5eB','KYLu9Z2GN1PZd1gWNPhf6tlj'))
+#         payment = client.order.create({'amount': amount, 'currency': 'INR', 'payment_capture': '1'})
+#     return render(request, "hod_template/payment.html")
 
-@csrf_exempt
-def success(request):
-    return render(request, "sidebar_template.html")
+# @csrf_exempt
+# def success(request):
+#     return render(request, "login.html")
+
+def payment(request):
+    if request.method == "POST":
+        name = request.POST.get("name")
+        email = request.POST.get("email")
+        amount = request.POST.get("amount")
+
+        # Create a new donation record
+        donation = donate.objects.create(name=name, email=email, amount=amount)
+
+        # Initialize the Razorpay client
+        client = razorpay.Client(auth=(settings.rzp_test_jkh95UAWnHF5eB, settings.KYLu9Z2GN1PZd1gWNPhf6tlj))
+
+        # Create a Razorpay order
+        order_amount = int(float(amount) * 100)  # Amount in paise
+        order_currency = "INR"
+        order_receipt = str(donation.id)  # Unique order ID
+        notes = {
+            "name": name,
+            "email": email,
+        }
+        order = client.order.create(amount=order_amount, currency=order_currency, receipt=order_receipt, notes=notes)
+
+        context = {
+            "payment": order,
+        }
+        return render(request, "hod_template/payment.html", context)
+
+    return render(request, "hod_template_payment.html")
 
 def doLogin(request, **kwargs):
     if request.method != 'POST':
         return HttpResponse("<h4>Denied</h4>")
     else:
         #Google recaptcha
-        captcha_token = request.POST.get('g-recaptcha-response')
-        captcha_url = "https://www.google.com/recaptcha/api/siteverify"
-        captcha_key = "6LfswtgZAAAAABX9gbLqe-d97qE2g1JP8oUYritJ"
-        data = {
-            'secret': captcha_key,
-            'response': captcha_token
-        }
+        # captcha_token = request.POST.get('g-recaptcha-response')
+        # captcha_url = "https://www.google.com/recaptcha/api/siteverify"
+        # captcha_key = "6LfswtgZAAAAABX9gbLqe-d97qE2g1JP8oUYritJ"
+        # data = {
+        #     'secret': captcha_key,
+        #     'response': captcha_token
+        
         # Make request
-        try:
-            captcha_server = requests.post(url=captcha_url, data=data)
-            response = json.loads(captcha_server.text)
-            if response['success'] == False:
-                messages.error(request, 'Invalid Captcha. Try Again')
-                return redirect('/')
-        except:
-            messages.error(request, 'Captcha could not be verified. Try Again')
-            return redirect('/')
+        # try:
+        #     captcha_server = requests.post(url=captcha_url, data=data)
+        #     response = json.loads(captcha_server.text)
+        #     if response['success'] == False:
+        #         messages.error(request, 'Invalid Captcha. Try Again')
+        #         return redirect('/')
+        # except:
+        #     messages.error(request, 'Captcha could not be verified. Try Again')
+        #     return redirect('/')
         
         #Authenticate
         user = EmailBackend.authenticate(request, username=request.POST.get('email'), password=request.POST.get('password'))

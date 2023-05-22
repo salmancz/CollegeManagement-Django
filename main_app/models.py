@@ -29,6 +29,16 @@ class CustomUserManager(UserManager):
         assert extra_fields["is_superuser"]
         return self._create_user(email, password, **extra_fields)
 
+class donate(models.Model):
+    name = models.CharField(max_length=1000, blank=True)
+    amount = models.IntegerField(default=100, blank=True)
+    email = models.CharField(max_length=100)
+    order_id = models.CharField(max_length=1000)
+    paid = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.name
+
 
 class Session(models.Model):
     start_year = models.DateField()
@@ -57,7 +67,7 @@ class CustomUser(AbstractUser):
     objects = CustomUserManager()
 
     def __str__(self):
-        return self.last_name + ", " + self.first_name
+        return self.first_name + " " + self.last_name
 
 
 class Admin(models.Model):
@@ -80,7 +90,7 @@ class Student(models.Model):
     session = models.ForeignKey(Session, on_delete=models.DO_NOTHING, null=True)
 
     def __str__(self):
-        return self.admin.last_name + ", " + self.admin.first_name
+        return self.admin.first_name + " " + self.admin.last_name
 
 
 class Staff(models.Model):
@@ -88,7 +98,7 @@ class Staff(models.Model):
     admin = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.admin.last_name + " " + self.admin.first_name
+        return self.admin.first_name + " " + self.admin.last_name
 
 
 class Subject(models.Model):
