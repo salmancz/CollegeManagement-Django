@@ -303,7 +303,7 @@ style="background-color: #F8FAFF; margin:10px color:#fff; ">
 
                     <a href="{% url 'payment' %}"
                         class="nav-link  {% if payment == request.path %} active1 {% endif %}">
-                        <i class="nav-icon fas fa-check-double"></i>
+                        <i class="nav-icon fas fa-credit-card"></i>
                         <p>
                          Payment
                         
@@ -509,6 +509,17 @@ style="background-color: #F8FAFF; margin:10px color:#fff; ">
                                                 <i class="nav-icon fas fa-bell"></i>
                                                 <p>
                                                     View Notifications
+
+                                                </p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            {% url 'student_payment' as student_payment%}
+                                            <a href="{{student_payment}}"
+                                                class="nav-link {% if student_payment  == request.path %} active1 {% endif %}">
+                                                <i class="nav-icon fas fa-credit-card"></i>
+                                                <p>
+                                                    Payment Portal
 
                                                 </p>
                                             </a>

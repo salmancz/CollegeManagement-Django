@@ -167,3 +167,7 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 prod_db = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(prod_db)
+
+RAZORPAY_API_KEY = 'rzp_test_RIzEoqqJnDlvAdrzp_test_RIzEoqqJnDlvAd'
+RAZORPAY_SECRET_KEY = 'KuilvUKVuaHccsC8iYSuHvhA'
+

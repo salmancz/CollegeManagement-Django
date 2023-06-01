@@ -29,17 +29,26 @@ class CustomUserManager(UserManager):
         assert extra_fields["is_superuser"]
         return self._create_user(email, password, **extra_fields)
 
-class donate(models.Model):
-    name = models.CharField(max_length=1000, blank=True)
-    amount = models.IntegerField(default=100, blank=True)
-    email = models.CharField(max_length=100)
-    order_id = models.CharField(max_length=1000)
-    paid = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
+    
+#     class Student(models.Model):
+#         name = models.CharField(max_length=100)
+#     fees_pending = models.DecimalField(max_digits=10, decimal_places=2)
+
+# class Fees(models.Model):
+#     student = models.ForeignKey(Student, on_delete=models.CASCADE)
+#     amount = models.DecimalField(max_digits=10, decimal_places=2)
 
 
+class donate(models.Model):
+    name = models.CharField(max_length= 1000 , blank=True)
+    amount = models.CharField(max_length=100 , blank=True)
+    email=models.CharField(max_length=100)
+    order_id = models.CharField(max_length=1000 )
+    paid = models.BooleanField(default=False)
+    
 class Session(models.Model):
     start_year = models.DateField()
     end_year = models.DateField()
@@ -204,3 +213,11 @@ def save_user_profile(sender, instance, **kwargs):
         instance.staff.save()
     if instance.user_type == 3:
         instance.student.save()
+
+class Studentfees(models.Model):
+    name = models.CharField(max_length=100)
+    fees_pending = models.DecimalField(max_digits=10, decimal_places=2)
+
+class Fees(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)

@@ -133,5 +133,7 @@ urlpatterns = [
          name="student_view_notification"),
     path('student/view/result/', student_views.student_view_result,
          name='student_view_result'),
+    path('student/view/studentpayment/', student_views.student_payment,
+         name='student_payment'),
 
 ]

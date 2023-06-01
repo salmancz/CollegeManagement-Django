@@ -1,39 +1,29 @@
 {% extends 'main_app/base.html' %}
-{% load static %}
-{% comment %} {% block page_title %}{{page_title}}{% endblock page_title %} {% endcomment %}
 
 {% block content %}
-
-<p>PAY THE FEES</p>
-
-<button id="rzp-button1">Pay</button>
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-<script>
-var options = {
-    "key": "rzp_test_jkh95UAWnHF5eB", // Enter the Key ID generated from the Dashboard
-    "amount": "50000", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-    "currency": "INR",
-    "name": "Web innoventix", //your business name
-    "description": "Web design and development",
-    "image": "https://example.com/your_logo",
-    "order_id": "{{payment.id}}", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-    "callback_url": "https://eneqd3r9zrjok.x.pipedream.net/",
-    "prefill": {
-        "name": "Web innoventix", //your customer's name
-        "email": "salman.jsdev@gmail.com",
-        "contact": "7200012300"
-    },
-    "notes": {
-        "address": "Razorpay Corporate Office"
-    },
-    "theme": {
-        "color": "#3399cc"
-    }
-};
-var rzp1 = new Razorpay(options);
-document.getElementById('rzp-button1').onclick = function(e){
-    rzp1.open();
-    e.preventDefault();
-}
-</script>
-{% endblock content %}      
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th>S.no</th>
+            <th>Name</th>
+            <th>Fees Pending</th>
+            <th>Add Fees</th>
+        </tr>
+        <button class="btn btn-primary add-fees-btn" data-student-id="{{ student.id }}">Add Fees</button>
+    </thead>
+    <tbody>
+        {% for student in students %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            
+            <td>{{ student.name }}</td>
+            <td>{{ student.fees_pending }}</td>
+            <td>
+                <button class="btn btn-primary add-fees-btn" data-student-id="{{ student.id }}">Add Fees</button>
+            </td>
+        </tr>
+        <button class="btn btn-primary add-fees-btn" data-student-id="{{ student.id }}">Add Fees</button>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

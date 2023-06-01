@@ -90,21 +90,28 @@ def student_view_attendance(request):
 
 @csrf_exempt
 def student_payment(request):
-    if request.method == "POST":
-        name = request.POST.get('name')
-        amount =int(request.POST.get('amount'))
-        print(amount)
-        email=request.POST.get('email')
-        client = razorpay.Client(auth =("rzp_test_jkh95UAWnHF5eB" , "KYLu9Z2GN1PZd1gWNPhf6tlj"))
-        payment = client.order.create({'amount':amount, 'currency':'INR',
-                              'payment_capture':'1' })
+    if request.method != 'POST':
+        allLeave = LeaveReportStudent.objects.all()
+        context = {
+            'allLeave': allLeave,
+            'page_title': 'Leave Applications From Students'
+        }
+        return render(request, "hod_template/payment.html", context)
+    else:
+        id = request.POST.get('id')
+        status = request.POST.get('status')
+        if (status == '1'):
+            status = 1
+        else:
+            status = -1
+        try:
+            leave = get_object_or_404(LeaveReportStudent, id=id)
+            leave.status = status
+            leave.save()
+            return HttpResponse(True)
+        except Exception as e:
+            return False
         
-        info = donate(name = name , email = email , amount =amount , order_id = payment['id'])
-        info.save()
-        
-        return render(request, 'hod_template/payment.html' ,{'payment':payment})
-    return render(request, 'hod_template/payment.html')
-
 def student_apply_leave(request):
     form = LeaveReportStudentForm(request.POST or None)
     student = get_object_or_404(Student, admin_id=request.user.id)
