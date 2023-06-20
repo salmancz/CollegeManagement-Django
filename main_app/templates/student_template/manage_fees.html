@@ -14,19 +14,6 @@
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-                        <div class="row mb-3">
-                            <div class="col-md-4">
-                                <label for="department-filter">Filter by Department:</label>
-                                <select id="department-filter" class="form-control">
-                                    <option value="">All Departments</option>
-                                    <option value="B.E(ECE)">B.E(ECE)</option>
-                                    <option value="B.E(CSE)">B.E(CSE)</option>
-                                    <option value="BCOM (VISCOM)">BCOM (VISCOM)</option>
-                                    <!-- Add more options for other departments -->
-                                </select>
-                            </div>
-                        </div>
-                        
                         <table id="example2" class="table table-bordered table-hover">
                             <thead class="thead-dark">
                                 <tr>
@@ -56,8 +43,8 @@
                                         {% endif %}
                                     </td>
                                     
-                                    <td><a href="{% url 'edit_student' student.student.id %}" class="btn btn-info">Edit</a> -
-                                        <a href="{% url 'delete_student' student.student.id %}" class="btn btn-danger" onclick="return confirm('Are you sure about this ?')">Delete</a>
+                                    <td><a href="{% url 'edit_fees' student.student.id %}" class="btn btn-info">Edit</a> -
+                                        <a href="{% url 'delete_fees' student.student.id %}" class="btn btn-danger" onclick="return confirm('Are you sure about this ?')">Delete</a>
 
                                     </td>
                                 </tr>
@@ -70,21 +57,4 @@
         </div>
     </div>
 </section>
-
-<script>
-    document.getElementById('department-filter').addEventListener('change', function () {
-        var selectedDepartment = this.value;
-        var rows = document.querySelectorAll('#example2 tbody tr');
-        
-        rows.forEach(function (row) {
-            var department = row.querySelector('td:nth-child(5)').innerText;
-            if (selectedDepartment === "" || department === selectedDepartment) {
-                row.style.display = "table-row";
-            } else {
-                row.style.display = "none";
-            }
-        });
-    });
-</script>
-
 {% endblock content %}

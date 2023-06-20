@@ -1,89 +1,98 @@
 {% extends 'main_app/base.html' %}
 {% load static %}
-{% comment %} {% block page_title %}{{page_title}}{% endblock page_title %} {% endcomment %}
+{% block page_title %}{{page_title}}{% endblock page_title %}
 
 {% block content %}
 
-<table class="table">
-    <thead class="thead-dark">
-        <tr>
-            <th>#</th>
-            <th>Name</th>
-            <th>Fees Pending</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for student in students %}
-        <tr>
-            <td>{{ forloop.counter }}</td>
-            <td>{{ student.name }}</td>
-            <td id="fees_pending_{{ student.id }}">{{ student.fees_pending }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-{% endblock %}
+<!-- template.html -->
 
-{% block custom_js %}
-<script>
-    $(document).ready(function() {
-        $('.add-fees-btn').on('click', function(e) {
-            e.preventDefault();
-            var studentId = $(this).data('student-id');
-            var amount = prompt('Enter fees amount:');
-
-            if (amount) {
-                $.ajax({
-                    url: "{% url 'add_fees' 0 %}".replace('0', studentId),
-                    type: 'POST',
-                    data: {
-                        'amount': amount,
-                        'csrfmiddlewaretoken': '{{ csrf_token }}',
-                    },
-                    success: function(response) {
-                        if (response.success) {
-                            $('#fees_pending_' + studentId).text(response.fees_pending);
-                            alert('Fees added successfully.');
-                        } else {
-                            alert('Failed to add fees. Please try again.');
-                        }
-                    },
-                    error: function() {
-                        alert('Failed to add fees. Please try again.');
-                    }
-                });
-            }
-        });
-    });
-</script>
-<button id="rzp-button1">Pay</button>
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-<script>
-var options = {
-    "key": "rzp_test_iY2rpKOY7QkqhI", // Enter the Key ID generated from the Dashboard
-    "amount": "100", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-    "currency": "INR",
-    "name": "Web innoventix", //your business name
-    "description": "Web design and development",
-    "image": "https://example.com/your_logo",
-    "order_id": "{{payment.id}}", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-    "callback_url": "https://eneqd3r9zrjok.x.pipedream.net/",
-    "prefill": {
-        "name": "Web innoventix", //your customer's name
-        "email": "salman.jsdev@gmail.com",
-        "contact": "7200012300"
-    },
-    "notes": {
-        "address": "Razorpay Corporate Office"
-    },
-    "theme": {
-        "color": "#3399cc"
+<style>
+    /* Table styles */
+    .table-container {
+      overflow-x: auto;
+      margin: 20px;
     }
-};
-var rzp1 = new Razorpay(options);
-document.getElementById('rzp-button1').onclick = function(e){
-    rzp1.open();
-    e.preventDefault();
-}
-</script>
-{% endblock content %}      
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: center;
+    }
+    
+    th,
+    td {
+      padding: 12px;
+      border: 1px solid #ddd;
+    }
+    
+    th {
+      background-color: #0e0e0e;
+      width: 80px; /* Adjust the width of the "Serial No" column */
+      color : white;
+    }
+    
+    /* Button styles */
+    .button-container {
+      display: flex;
+      justify-content: flex-end;
+      margin: 20px;
+    }
+    
+    .button-container button {
+      padding: 10px 20px;
+      background-color: #4caf50;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+  
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Serial No</th>
+        
+          <th>Fees Paid (₹)</th>
+          <th>Fees Pending (₹)</th>
+          <th>Semester</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+      
+          <td>1000</td>
+          <td>500</td>
+          <td>|</td>
+        </tr>
+        <tr>
+          <td>2</td>
+       
+          <td>1500</td>
+          <td>0</td>
+          <td>||</td>
+        </tr>
+        <tr>
+          <td>3</td>
+  
+          <td>800</td>
+          <td>200</td>
+          <td>|||</td>
+        </tr>
+        <tr>
+          <td>4</td>
+     
+          <td>1200</td>
+          <td>300</td>
+          <td>|V</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+  <div class="button-container">
+    <button>Pay Fees</button>
+  </div>
+  
+{% endblock content %}

@@ -1,29 +1,93 @@
 {% extends 'main_app/base.html' %}
+{% load static %}
+{% block page_title %}{{page_title}}{% endblock page_title %}
 
 {% block content %}
-<table class="table">
-    <thead class="thead-dark">
+
+<!-- template.html -->
+
+<style>
+    /* Table styles */
+    .table-container {
+      overflow-x: auto;
+      margin: 20px;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: center;
+    }
+    
+    th,
+    td {
+      padding: 12px;
+      border: 1px solid #ddd;
+    }
+    
+    th {
+      background-color: #0e0e0e;
+      width: 80px; /* Adjust the width of the "Serial No" column */
+      color : white;
+    }
+    
+    /* Button styles */
+    .button-container {
+      display: flex;
+      justify-content: flex-end;
+      margin: 20px;
+    }
+    
+    .button-container button {
+      padding: 10px 20px;
+      background-color: #4caf50;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+  
+  <div class="table-container">
+    <table>
+      <thead>
         <tr>
-            <th>S.no</th>
-            <th>Name</th>
-            <th>Fees Pending</th>
-            <th>Add Fees</th>
+          <th>Serial No</th>
+          <th>Student Name</th>
+          <th>Fees Paid (₹)</th>
+          <th>Fees Pending (₹)</th>
         </tr>
-        <button class="btn btn-primary add-fees-btn" data-student-id="{{ student.id }}">Add Fees</button>
-    </thead>
-    <tbody>
-        {% for student in students %}
+      </thead>
+      <tbody>
         <tr>
-            <td>{{ forloop.counter }}</td>
-            
-            <td>{{ student.name }}</td>
-            <td>{{ student.fees_pending }}</td>
-            <td>
-                <button class="btn btn-primary add-fees-btn" data-student-id="{{ student.id }}">Add Fees</button>
-            </td>
+          <td>1</td>
+          <td>John Doe</td>
+          <td>1000</td>
+          <td>500</td>
         </tr>
-        <button class="btn btn-primary add-fees-btn" data-student-id="{{ student.id }}">Add Fees</button>
-        {% endfor %}
-    </tbody>
-</table>
-{% endblock %}
+        <tr>
+          <td>2</td>
+          <td>Jane Smith</td>
+          <td>1500</td>
+          <td>0</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>David Johnson</td>
+          <td>800</td>
+          <td>200</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>Sarah Williams</td>
+          <td>1200</td>
+          <td>300</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+  <div class="button-container">
+    <button>Add Fees</button>
+  </div>
+  
+{% endblock content %}

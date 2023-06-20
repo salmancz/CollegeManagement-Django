@@ -13,26 +13,26 @@ from .EmailBackend import EmailBackend
 from .models import Attendance, Session, Subject
 
 
-def student_view(request):
-    students = Student.objects.all()
-    return render(request, 'student_view.html', {'students': students})
+# def student_view(request):
+#     students = Student.objects.all()
+#     return render(request, 'student_view.html', {'students': students})
 
-def hod_view(request):
-    students = Student.objects.all()
-    return render(request, 'hod_view.html', {'students': students})
+# def hod_view(request):
+#     students = Student.objects.all()
+#     return render(request, 'hod_view.html', {'students': students})
 
-def add_fees(request, student_id):
-    student = get_object_or_404(Student, id=student_id)
-    amount = request.POST.get('amount')
+# def add_fees(request, student_id):
+#     student = get_object_or_404(Student, id=student_id)
+#     amount = request.POST.get('amount')
 
-    if amount:
-        fees = Fees.objects.create(student=student, amount=amount)
-        student.fees_pending += float(amount)
-        student.save()
+#     if amount:
+#         fees = Fees.objects.create(student=student, amount=amount)
+#         student.fees_pending += float(amount)
+#         student.save()
 
-        return JsonResponse({'success': True, 'fees_pending': str(student.fees_pending)})
-    else:
-        return JsonResponse({'success': False})
+#         return JsonResponse({'success': True, 'fees_pending': str(student.fees_pending)})
+#     else:
+#         return JsonResponse({'success': False})
 def login_page(request):
     if request.user.is_authenticated:
         if request.user.user_type == '1':

@@ -1,0 +1,34 @@
+<!-- grid.html -->
+
+<table>
+    <thead>
+      <tr>
+        <th>Serial No</th>
+        <th>Name</th>
+        <th>Fees Balance</th>
+        {% if editable %}
+        <th>Actions</th>
+        {% endif %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for student in students %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ student.name }}</td>
+        <td>{{ student.fees_balance }}</td>
+        {% if editable %}
+        <td>
+          <form method="post" action="{% url 'edit_student' student.id %}">
+            {% csrf_token %}
+            <input type="text" name="name" value="{{ student.name }}">
+            <input type="number" name="fees_balance" value="{{ student.fees_balance }}">
+            <button type="submit">Save</button>
+          </form>
+        </td>
+        {% endif %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  

@@ -94,9 +94,9 @@ def student_payment(request):
         allLeave = LeaveReportStudent.objects.all()
         context = {
             'allLeave': allLeave,
-            'page_title': 'Leave Applications From Students'
+            'page_title': 'Payment Portal'
         }
-        return render(request, "hod_template/payment.html", context)
+        return render(request, "student_template/student_payment.html", context)
     else:
         id = request.POST.get('id')
         status = request.POST.get('status')
@@ -160,6 +160,70 @@ def student_feedback(request):
             messages.error(request, "Form has errors!")
     return render(request, "student_template/student_feedback.html", context)
 
+def manage_fees(request):
+    students = CustomUser.objects.filter(user_type=3)
+    context = {
+        'students': students,
+        'page_title': 'Manage Fees'
+    }
+    return render(request, "student_template/manage_fees.html", context)
+
+def edit_fees(request, student_id):
+    student = get_object_or_404(Student, id=student_id)
+    form = StudentForm(request.POST or None, instance=student)
+    print('hi')
+    context = {
+        'form': form,
+        'student_id': student_id,
+        'page_title': 'Edit fees'
+    }
+    if request.method == 'POST':
+        if form.is_valid():
+            first_name = form.cleaned_data.get('first_name')
+            last_name = form.cleaned_data.get('last_name')
+            address = form.cleaned_data.get('address')
+            username = form.cleaned_data.get('username')
+            email = form.cleaned_data.get('email')
+            gender = form.cleaned_data.get('gender')
+            password = form.cleaned_data.get('password') or None
+            course = form.cleaned_data.get('course')
+            session = form.cleaned_data.get('session')
+            passport = request.FILES.get('profile_pic') or None
+            try:
+                user = CustomUser.objects.get(id=student.admin.id)
+                if passport != None:
+                    fs = FileSystemStorage()
+                    filename = fs.save(passport.name, passport)
+                    passport_url = fs.url(filename)
+                    user.profile_pic = passport_url
+                user.username = username
+                user.email = email
+                if password != None:
+                    user.set_password(password)
+                user.first_name = first_name
+                user.last_name = last_name
+                student.session = session
+                user.gender = gender
+                user.address = address
+                student.course = course
+                user.save()
+                student.save()
+                messages.success(request, "Successfully Updated")
+                return redirect(reverse('edit_fees', args=[student_id]))
+            except Exception as e:
+                messages.error(request, "Could Not Update " + str(e))
+        else:
+            messages.error(request, "Please Fill Form Properly!")
+    else:
+        return render(request, "student_template/edit_fees_template.html", context)
+
+
+
+def delete_fees(request, student_id):
+    student = get_object_or_404(CustomUser, student__id=student_id)
+    student.delete()
+    messages.success(request, "Student deleted successfully!")
+    return redirect(reverse('manage_fees'))
 
 def student_view_profile(request):
     student = get_object_or_404(Student, admin=request.user)
